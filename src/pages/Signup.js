@@ -2,16 +2,21 @@ import React, { useEffect, useState } from "react";
 import loginImage from "../assets/login.svg";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "./../features/auth/authSlice";
 const Signup = () => {
   const dispatch = useDispatch();
   const { handleSubmit, register, reset, control } = useForm();
+  const { isLoading, email } = useSelector((state) => state.auth);
   const password = useWatch({ control, name: "password" });
   const confirmPassword = useWatch({ control, name: "confirmPassword" });
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(true);
-
+  useEffect(() => {
+    if (!isLoading && email) {
+      navigate("/");
+    }
+  }, [navigate, isLoading, email]);
   useEffect(() => {
     if (
       password !== undefined &&
