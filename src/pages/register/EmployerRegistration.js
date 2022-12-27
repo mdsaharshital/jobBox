@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { FaChevronLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../../features/auth/authApi";
+import { toast } from "react-hot-toast";
 
 const EmployerRegistration = () => {
   const [countries, setCountries] = useState([]);
@@ -9,6 +11,7 @@ const EmployerRegistration = () => {
   const term = useWatch({ control, name: "term" });
   console.log(term);
   const navigate = useNavigate();
+  const [postUser, { isLoading, isError }] = useRegisterMutation();
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
@@ -16,10 +19,19 @@ const EmployerRegistration = () => {
       .then((data) => setCountries(data));
   }, []);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    const result = await postUser({ ...data, role: "employer" });
+    console.log("", result);
+    if (!isLoading && !isError && result.data.acknowledged) {
+      toast.success("Successfully registered as Employer");
+    }
   };
-
+  useEffect(() => {
+    // if (!isLoading && !isError) {
+    //   toast.success("Successfully registered as Employer");
+    // }
+  }, [isLoading, isError]);
   return (
     <div className="pt-14">
       <div
