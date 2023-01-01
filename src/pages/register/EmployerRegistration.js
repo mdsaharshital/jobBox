@@ -1,31 +1,46 @@
-import React, { useEffect, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { FaChevronLeft } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../../features/auth/authApi";
+import React from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { FaChevronLeft } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 
 const EmployerRegistration = () => {
+  const [postUser, { isLoading, isError }] = useRegisterMutation();
   const {
     user: { email },
   } = useSelector((state) => state.auth);
-  const [countries, setCountries] = useState([]);
   const { handleSubmit, register, control } = useForm({
     defaultValues: {
       email,
     },
   });
   const term = useWatch({ control, name: "term" });
-  console.log(term);
   const navigate = useNavigate();
-  const [postUser, { isLoading, isError }] = useRegisterMutation();
 
-  useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then((res) => res.json())
-      .then((data) => setCountries(data));
-  }, []);
+  const businessCategory = [
+    "Automotive",
+    "Business Support & Supplies",
+    "Computers & Electronics",
+    "Construction & Contractors",
+    "Design Agency",
+    "Education",
+    "Entertainment",
+    "Food & Dining",
+    "Health & Medicine",
+    "Home & Garden",
+    "IT Farm",
+    "Legal & Financial",
+    "Manufacturing, Wholesale, Distribution",
+    "Merchants (Retail)",
+    "Miscellaneous",
+    "Personal Care & Services",
+    "Real Estate",
+    "Travel & Transportation",
+  ];
+
+  const employeeRange = ["1 - 10", "11 - 50", "51 - 100", "Above 100"];
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -35,11 +50,7 @@ const EmployerRegistration = () => {
       toast.success("Successfully registered as Employer");
     }
   };
-  useEffect(() => {
-    // if (!isLoading && !isError) {
-    //   toast.success("Successfully registered as Employer");
-    // }
-  }, [isLoading, isError]);
+
   return (
     <div className="pt-14">
       <div
@@ -72,10 +83,10 @@ const EmployerRegistration = () => {
               Email
             </label>
             <input
-              disabled
-              className="cursor-not-allowed bg-blue-100"
+              className="bg-blue-100 cursor-not-allowed"
               type="email"
               id="email"
+              disabled
               {...register("email")}
             />
           </div>
@@ -119,34 +130,45 @@ const EmployerRegistration = () => {
           </div>
           <hr className="w-full mt-2 bg-black" />
           <div className="flex flex-col w-full max-w-xs">
-            <label className="mb-3" for="country">
-              Country
+            <label className="mb-2" htmlFor="companyName">
+              Company's name
             </label>
-            <select {...register("country")} id="country">
-              {countries
-                .sort((a, b) => a?.name?.common?.localeCompare(b?.name?.common))
-                .map(({ name }) => (
-                  <option value={name.common}>{name.common}</option>
+            <input type="text" {...register("companyName")} id="companyName" />
+          </div>
+          <div className="flex flex-col w-full max-w-xs">
+            <label className="mb-3" for="employeeRange">
+              Number of employee
+            </label>
+            <select {...register("employeeRange")} id="employeeRange">
+              {employeeRange
+                .sort((a, b) => a.localeCompare(b))
+                .map((category) => (
+                  <option value={category}>{category}</option>
+                ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col w-full max-w-xs">
+            <label className="mb-3" for="companyCategory">
+              Company's Category
+            </label>
+            <select {...register("companyCategory")} id="companyCategory">
+              {businessCategory
+                .sort((a, b) => a.localeCompare(b))
+                .map((category) => (
+                  <option value={category}>{category}</option>
                 ))}
             </select>
           </div>
           <div className="flex flex-col w-full max-w-xs">
-            <label className="mb-2" htmlFor="address">
-              Street Address
+            <label className="mb-2" htmlFor="roleInCompany">
+              Your role in company
             </label>
-            <input type="text" {...register("address")} id="address" />
-          </div>
-          <div className="flex flex-col w-full max-w-xs">
-            <label className="mb-2" htmlFor="city">
-              City
-            </label>
-            <input type="text" {...register("city")} id="city" />
-          </div>
-          <div className="flex flex-col w-full max-w-xs">
-            <label className="mb-2" htmlFor="postcode">
-              Postal Code
-            </label>
-            <input type="text" {...register("postcode")} id="postcode" />
+            <input
+              type="text"
+              {...register("roleInCompany")}
+              id="roleInCompany"
+            />
           </div>
 
           <div className="flex justify-between items-center w-full mt-3">
