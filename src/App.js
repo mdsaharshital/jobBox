@@ -11,9 +11,6 @@ function App() {
   const { isLoading, isError, error } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isError && !isLoading) {
-      toast.error(error);
-    }
     onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(getUser(user.email));
@@ -21,7 +18,7 @@ function App() {
         dispatch(toggleUser());
       }
     });
-  }, [dispatch, isLoading, isError, error]);
+  }, [dispatch]);
   return (
     <>
       <Toaster />

@@ -4,10 +4,18 @@ import { FaChevronLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../../features/auth/authApi";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const EmployerRegistration = () => {
+  const {
+    user: { email },
+  } = useSelector((state) => state.auth);
   const [countries, setCountries] = useState([]);
-  const { handleSubmit, register, control } = useForm();
+  const { handleSubmit, register, control } = useForm({
+    defaultValues: {
+      email,
+    },
+  });
   const term = useWatch({ control, name: "term" });
   console.log(term);
   const navigate = useNavigate();
@@ -63,7 +71,13 @@ const EmployerRegistration = () => {
             <label className="mb-2" htmlFor="email">
               Email
             </label>
-            <input type="email" id="email" {...register("email")} />
+            <input
+              disabled
+              className="cursor-not-allowed bg-blue-100"
+              type="email"
+              id="email"
+              {...register("email")}
+            />
           </div>
           <div className="flex flex-col w-full max-w-xs">
             <h1 className="mb-3">Gender</h1>
