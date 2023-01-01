@@ -36,7 +36,9 @@ const AddJob = () => {
     const result = await postJob(data);
     console.log(result);
     if (!isLoading && !isError && result.data.data.acknowledged) {
-      toast.success("Job posted successfully");
+      return toast.success("Job posted successfully");
+    } else {
+      return toast.success(`${error}`);
     }
   };
 
