@@ -7,7 +7,10 @@ import { createUser } from "./../features/auth/authSlice";
 const Signup = () => {
   const dispatch = useDispatch();
   const { handleSubmit, register, reset, control } = useForm();
-  const { isLoading, email } = useSelector((state) => state.auth);
+  const {
+    isLoading,
+    user: { email },
+  } = useSelector((state) => state.auth);
   const password = useWatch({ control, name: "password" });
   const confirmPassword = useWatch({ control, name: "confirmPassword" });
   const navigate = useNavigate();

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import loginImage from "../assets/login.svg";
@@ -8,8 +7,11 @@ import { loginUser, loginWithGoogle } from "../features/auth/authSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { isLoading, email } = useSelector((state) => state.auth);
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    isLoading,
+    user: { email },
+  } = useSelector((state) => state.auth);
+  const { register, handleSubmit } = useForm();
   const onSubmit = ({ email, password }) => {
     console.log({ email, password });
     dispatch(loginUser({ email, password }));
