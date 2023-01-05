@@ -11,6 +11,7 @@ import PrivateRoute from "../utils/PrivateRoute";
 import AddJob from "../pages/employerDashboard/AddJob";
 import EmployerDashboard from "../pages/employerDashboard/EmployerDashboard";
 import CandidateDashboard from "./../pages/candidateDashboard/CandidateDashboard";
+import AppliedJobs from "./../pages/candidateDashboard/AppliedJobs";
 
 const routes = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ const routes = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      {
+        path: "applied-jobs",
+        element: <AppliedJobs />,
+      },
       {
         path: "add-job",
         element: <AddJob />,
