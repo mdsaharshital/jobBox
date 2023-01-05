@@ -10,7 +10,7 @@ const AddJob = () => {
     user: { companyName },
   } = useSelector((state) => state.auth);
   const [postJob, { isError, isLoading, error }] = usePostJobMutation();
-  const { handleSubmit, register, control } = useForm({
+  const { handleSubmit, reset, register, control } = useForm({
     defaultValues: {
       companyName,
     },
@@ -33,9 +33,10 @@ const AddJob = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-    const result = await postJob(data);
+    const result = await postJob({ ...data, applicants: [], queries: [] });
     console.log(result);
     if (!isLoading && !isError && result.data.data.acknowledged) {
+      reset();
       return toast.success("Job posted successfully");
     } else {
       return toast.success(`${error}`);

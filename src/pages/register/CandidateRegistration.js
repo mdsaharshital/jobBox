@@ -4,10 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
 import { useRegisterMutation } from "../../features/auth/authApi";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const CandidateRegistration = () => {
   const [countries, setCountries] = useState([]);
-  const { handleSubmit, register, control } = useForm();
+  const { user } = useSelector((state) => state.auth);
+  const { handleSubmit, register, control, reset } = useForm({
+    defaultValues: {
+      email: user?.email,
+    },
+  });
 
   const [postUser, { isLoading, isError }] = useRegisterMutation();
   const term = useWatch({ control, name: "term" });
@@ -25,14 +31,10 @@ const CandidateRegistration = () => {
     const result = await postUser({ ...data, role: "candidate" });
     console.log("", result);
     if (!isLoading && !isError && result.data.acknowledged) {
-      toast.success("Successfully registered as candidate");
+      reset();
+      return toast.success("Successfully registered as candidate");
     }
   };
-  useEffect(() => {
-    // if (!isLoading && !isError) {
-    //   toast.success("Successfully registered as candidate");
-    // }
-  }, [isLoading, isError]);
   return (
     <div className="pt-14">
       <div
@@ -64,7 +66,13 @@ const CandidateRegistration = () => {
             <label className="mb-2" htmlFor="email">
               Email
             </label>
-            <input type="email" id="email" {...register("email")} />
+            <input
+              className="bg-blue-100 cursor-not-allowed"
+              type="email"
+              id="email"
+              disabled
+              {...register("email")}
+            />
           </div>
           <div className="flex flex-col w-full max-w-xs">
             <h1 className="mb-3">Gender</h1>

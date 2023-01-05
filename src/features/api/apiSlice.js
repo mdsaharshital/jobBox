@@ -6,5 +6,6 @@ const apiSlice = createApi({
     baseUrl: "https://jobbox-server-delta.vercel.app/",
   }),
   endpoints: (builder) => ({}),
+  tagTypes: ["jobs"],
 });
 export default apiSlice;
