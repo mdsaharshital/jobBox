@@ -6,6 +6,8 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import auth from "./../../firebase.config";
+import { toast } from "react-hot-toast";
+
 const initialState = {
   user: { role: "", email: "" },
   isLoading: true,
@@ -15,7 +17,12 @@ const initialState = {
 export const createUser = createAsyncThunk(
   "auth/createUser",
   async ({ email, password }) => {
-    const data = await createUserWithEmailAndPassword(auth, email, password);
+    const data = await createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("", data);
     return data.user.email;
   }
 );

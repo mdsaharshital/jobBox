@@ -7,7 +7,7 @@ import { usePostJobMutation } from "../../features/job/jobApi";
 
 const AddJob = () => {
   const {
-    user: { companyName },
+    user: { companyName, email },
   } = useSelector((state) => state.auth);
   const [postJob, { isError, isLoading, error }] = usePostJobMutation();
   const { handleSubmit, reset, register, control } = useForm({
@@ -33,7 +33,12 @@ const AddJob = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-    const result = await postJob({ ...data, applicants: [], queries: [] });
+    const result = await postJob({
+      ...data,
+      applicants: [],
+      queries: [],
+      jobPostedBy: email,
+    });
     console.log(result);
     if (!isLoading && !isError && result.data.data.acknowledged) {
       reset();
